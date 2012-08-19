@@ -1,6 +1,6 @@
 ﻿@model Chat.Domain.Model.Author
 @{
-    ViewBag.Title = "Social News";
+    ViewBag.Title = "Social Chat";
 }
 
 @section Scripts {
@@ -63,10 +63,10 @@
                         <span>
                             <a href="javascript:void(0);" class="post-info-link like" 
                             data-bind="style: { display: likedByThisUser() ? 'none' : ''},
-                            click: addLike">Like</a>
+                            click: addLike">Curtir</a>
                             <a href="javascript:void(0);" class="post-info-link unlike"  
                             data-bind="style: { display: likedByThisUser() ? '' : 'none'},
-                            click: unlike">Like (Undo)</a>
+                            click: unlike">Curtir (Desfazer)</a>
                         </span>
                         <!-- /ko -->
                     </div>
@@ -105,9 +105,9 @@
                             <!-- ko if: $root.isSignalREnabled -->
                             <span>
                                 <a href="javascript:like(1);" class="post-info-link" 
-                                data-bind="style: { display: likedByThisUser() ? 'none' : ''}, click: addLike">Like</a>
+                                data-bind="style: { display: likedByThisUser() ? 'none' : ''}, click: addLike">Curtir</a>
                                 <a href="javascript:like(1);" class="post-info-link" 
-                                data-bind="style: { display: likedByThisUser() ? '' : 'none'}, click: unlike">Like (Undo)</a>
+                                data-bind="style: { display: likedByThisUser() ? '' : 'none'}, click: unlike">Curtir (Desfazer)</a>
                             </span>
                             <!-- /ko -->
                             <div class="likeInfo" data-bind="text: likeSummary,

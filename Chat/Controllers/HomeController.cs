@@ -26,7 +26,7 @@ namespace Chat.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Title = "Social News";
+            ViewBag.Title = ".Net Magazine Chat";
             return View();
         }
 

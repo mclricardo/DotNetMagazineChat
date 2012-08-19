@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="FluentNHibernate, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\FluentNHibernate.dll</HintPath>
@@ -81,7 +78,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -180,14 +177,13 @@
     <Content Include="Content\images\Background3.jpg" />
     <Content Include="Content\images\Background4.jpg" />
     <Content Include="Content\images\Background5.jpg" />
-    <Content Include="Content\images\Bob.png" />
-    <Content Include="Content\images\BobIcon.png" />
     <Content Include="Content\images\clock.png" />
-    <Content Include="Content\images\content1.png" />
     <Content Include="Content\images\balloonEdge.png" />
     <Content Include="Content\images\exclamation.png" />
     <Content Include="Content\images\facebook-loading.gif" />
     <Content Include="Content\images\loading_small.gif" />
+    <Content Include="Content\images\NetMagazine.png" />
+    <Content Include="Content\images\NetMagazineIcon.png" />
     <Content Include="Content\images\wait.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -259,7 +255,7 @@
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Accounts\LogOn.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />

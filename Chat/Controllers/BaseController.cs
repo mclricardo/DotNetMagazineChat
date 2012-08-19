@@ -12,7 +12,7 @@ namespace Chat.Controllers
     {
         public BaseController()
         {
-            ViewBag.Title = "Social News";
+            ViewBag.Title = "Social Chat";
         }
     }
 }

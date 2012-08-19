@@ -47,7 +47,7 @@ var Message = function (id, text, author, createdOn, replies, likes) {
         $(sortedLikes).each(function (index, author) {
             if (summary.length > 0) {
                 if (index == likes.length - 1) {
-                    summary += ' and ';
+                    summary += ' e ';
                 }
                 else {
                     summary += ', ';
@@ -55,14 +55,17 @@ var Message = function (id, text, author, createdOn, replies, likes) {
             }
 
             if (author.name == userInfo.Name) {
-                summary += 'You';
+                summary += 'Você';
             }
             else {
                 summary += author.name;
             }
         });
-        if (self.likes().length > 0) {
-            summary += ' liked this';
+        if (self.likes().length > 1) {
+            summary += ' curtiram isto';
+        }
+        else if (self.likes().length > 0) {
+            summary += ' curtiu isto';
         }
         return summary;
     });
@@ -127,30 +130,7 @@ var Message = function (id, text, author, createdOn, replies, likes) {
         var h = parseInt(m / 60);
         var d = parseInt(h / 24);
 
-        if (d > 1) {
-            ellapsed = d + ' days ago';
-        }
-        else if (d == 1) {
-            ellapsed = d + ' day ago';
-        }
-        else if (h > 1) {
-            ellapsed = h + ' hours ago';
-        }
-        else if (h == 1) {
-            ellapsed = h + ' hour ago';
-        }
-        else if (m > 1) {
-            ellapsed = m + ' minutes ago';
-        }
-        else if (m == 1) {
-            ellapsed = m + ' minute ago';
-        }
-        else if (s > 10) {
-            ellapsed = s + ' seconds ago';
-        }
-        else {
-            ellapsed = 'just posted';
-        }
+        ellapsed = getEllapsedTime(timeStampDiff);
 
         return ellapsed;
     });
@@ -243,7 +223,7 @@ $(function () {
 
 function requestWallMessages() {
     $.ajax({
-        url: "/Chat/Home/GetWallMessages",
+        url: "/Home/GetWallMessages",
         dataType: 'json',
         success: function (data) {
             setTimeout(function () {
@@ -277,7 +257,7 @@ function setupHubClient() {
             window.wallViewModel.isSignalREnabled(true);
         }
     }).fail(function () {
-        alert('SignalR connection failed!');
+        alert('Conexão SignalR falhou!');
     });
 
     socialHubClient.updateLike = function (messageId, personWhoLiked) {
@@ -332,30 +312,7 @@ function setTimeEllapsedField(message) {
         var h = parseInt(m / 60);
         var d = parseInt(h / 24);
 
-        if (d > 1) {
-            ellapsed = d + ' days ago';
-        }
-        else if (d == 1) {
-            ellapsed = d + ' day ago';
-        }
-        else if (h > 1) {
-            ellapsed = h + ' hours ago';
-        }
-        else if (h == 1) {
-            ellapsed = h + ' hour ago';
-        }
-        else if (m > 1) {
-            ellapsed = m + ' minutes ago';
-        }
-        else if (m == 1) {
-            ellapsed = m + ' minute ago';
-        }
-        else if (s > 10) {
-            ellapsed = s + ' seconds ago';
-        }
-        else {
-            ellapsed = 'just posted';
-        }
+        ellapsed = getEllapsedTime(timeStampDiff);
 
         return ellapsed;
     });
@@ -417,4 +374,38 @@ function unlike(message) {
             }
         }
     });
+}
+
+function getEllapsedTime(timeStampDiff) {
+    var ellapsed;
+    var s = parseInt(timeStampDiff / 1000);
+    var m = parseInt(s / 60);
+    var h = parseInt(m / 60);
+    var d = parseInt(h / 24);
+
+    if (d > 1) {
+        ellapsed = d + ' dias atrás';
+    }
+    else if (d == 1) {
+        ellapsed = d + ' dia atrás';
+    }
+    else if (h > 1) {
+        ellapsed = h + ' horas atrás';
+    }
+    else if (h == 1) {
+        ellapsed = h + ' hora atrás';
+    }
+    else if (m > 1) {
+        ellapsed = m + ' minutos atrás';
+    }
+    else if (m == 1) {
+        ellapsed = m + ' minuto atrás';
+    }
+    else if (s > 10) {
+        ellapsed = s + ' segundos atrás';
+    }
+    else {
+        ellapsed = 'neste momento';
+    }
+    return ellapsed;
 }
