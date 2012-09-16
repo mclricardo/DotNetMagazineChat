@@ -13,38 +13,38 @@ namespace Chat.Hubs
     {
         private readonly ChatModel _chat;
 
-        public void SendLikeToServer(int messageId)
+        public void EnviarCurtirParaServidor(int comentarioId)
         {
-            var messageRepository = new MessageRepository();
-            messageRepository.AddLike(messageId, Context.User.Identity.Name, (author) =>
+            var comentarioRepository = new ComentarioRepository();
+            comentarioRepository.Curtir(comentarioId, Context.User.Identity.Name, (usuario) =>
                 {
-                    Clients.updateLike(messageId, new {Id = author.Id, Name = author.Name});
+                    Clients.atualizarCurtidas(comentarioId, new {Id = usuario.Id, Nome = usuario.Nome});
                 });
         }
 
-        public void SendUnlikeToServer(int messageId)
+        public void EnviarDescurtirParaServidor(int messageId)
         {
-            var messageRepository = new MessageRepository();
-            messageRepository.Unlike(messageId, Context.User.Identity.Name, (author) =>
+            var messageRepository = new ComentarioRepository();
+            messageRepository.Descurtir(messageId, Context.User.Identity.Name, (usuario) =>
             {
-                Clients.updateUnlike(messageId, new { Id = author.Id, Name = author.Name });
+                Clients.atualizarDescurtidas(messageId, new { Id = usuario.Id, Nome = usuario.Nome });
             });
         }
 
-        public void SendCommentToServer(int? parentMessageId, string comment)
+        public void EnviarComentarioParaServidor(int? comentarioPaiId, string texto)
         {
-            string userName = Context.User.Identity.Name;
-            var authorRepository = new AuthorRepository();
-            var author = authorRepository.GetAllFilteredBy(x => x.Login.Equals(userName, StringComparison.InvariantCultureIgnoreCase)).Single();
-            var messageRepository = new MessageRepository();
-            Message newMessage = messageRepository.AddMessage(parentMessageId, comment, author, messageRepository);
-            Clients.addComment(parentMessageId, newMessage.Id, comment, new { Id = author.Id, Name = author.Name, SmallPicturePath = author.SmallPicturePath, MediumPicturePath = author.MediumPicturePath });
+            string nome = Context.User.Identity.Name;
+            var usuarioRepository = new UsuarioRepository();
+            var usuario = usuarioRepository.GetAllFilteredBy(x => x.Login.Equals(nome, StringComparison.InvariantCultureIgnoreCase)).Single();
+            var comentarioRepository = new ComentarioRepository();
+            Comentario novoComentario = comentarioRepository.AdicionarComentario(comentarioPaiId, texto, usuario, comentarioRepository);
+            Clients.adicionarComentario(comentarioPaiId, novoComentario.Id, texto, new { Id = usuario.Id, Nome = usuario.Nome });
         }
 
-        public void Join(string name)
+        public void Join(string nome)
         {
-            ChatModel.Clients.Add(new Client() { Name = name, LastResponse = DateTime.Now });
-            Caller.Name = name;
+            ChatModel.Clients.Add(new Client() { Name = nome, LastResponse = DateTime.Now });
+            Caller.Nome = nome;
         }
     }
 }

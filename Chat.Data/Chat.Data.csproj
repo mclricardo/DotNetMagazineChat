@@ -55,10 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
-    <Compile Include="AuthorRepository.cs" />
+    <Compile Include="UsuarioRepository.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="MessageRepository.cs" />
+    <Compile Include="ComentarioRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

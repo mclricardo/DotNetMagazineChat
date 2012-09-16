@@ -1,22 +1,22 @@
 ﻿var socialHubClient;
 var userInfo;
 
-var Message = function (id, text, author, createdOn, replies, likes) {
+var Comentario = function (id, texto, usuario, criadoEm, replies, curtiram) {
     var self = this;
 
     self.id = ko.observable(id);
-    self.text = ko.observable(text);
-    self.author = ko.observable(author);
-    self.createdOn = ko.observable(createdOn);
-    self.likes = ko.observableArray(likes);
-    self.newComment = ko.observable('');
+    self.texto = ko.observable(texto);
+    self.usuario = ko.observable(usuario);
+    self.criadoEm = ko.observable(criadoEm);
+    self.curtiram = ko.observableArray(curtiram);
+    self.novoComentario = ko.observable('');
     self.itemToAdd = ko.observable(""),
-    self.showCommentWatermark = ko.observable(true),
+    self.mostrarMarcaDAgua = ko.observable(true),
     self.isTypingComment = false,
 
-    self.likedByThisUser = ko.computed(function () {
+    self.curtidoPorEsteUsuario = ko.computed(function () {
         var liked = false;
-        $(self.likes()).each(function (array, user) {
+        $(self.curtiram()).each(function (array, user) {
             if (user.id == userInfo.Id) {
                 liked = true;
             }
@@ -24,29 +24,29 @@ var Message = function (id, text, author, createdOn, replies, likes) {
         return liked;
     });
 
-    self.addLike = function () {
-        socialHubClient.sendLikeToServer(self.id());
+    self.curtir = function () {
+        socialHubClient.enviarCurtirParaServidor(self.id());
     } .bind(self);
 
-    self.unlike = function () {
-        socialHubClient.sendUnlikeToServer(self.id());
+    self.descurtir = function () {
+        socialHubClient.enviarDescurtirParaServidor(self.id());
     } .bind(self);
 
-    self.addNewComment = function (id, comment, user, createdOn) {
-        self.messages.push(new Message(id, comment, user, createdOn, [], []));
+    self.adicionarNovoComentario = function (id, comentario, usuario, criadoEm) {
+        self.comentarios.push(new Comentario(id, comentario, usuario, criadoEm, [], []));
     } .bind(self);
 
-    self.likeSummary = ko.computed(function () {
+    self.sumarioDeCurtidas = ko.computed(function () {
         var summary = '';
-        var sortedLikes = self.likes.sort(function (a, b) {
+        var sortedCurtiram = self.curtiram.sort(function (a, b) {
             var expA = (a.Id == userInfo.Id ? -1 : 1);
             var expB = (b.Id == userInfo.Id ? -1 : 1);
             return expA < expB ? -1 : 1;
         })
 
-        $(sortedLikes).each(function (index, author) {
+        $(sortedCurtiram).each(function (index, usuario) {
             if (summary.length > 0) {
-                if (index == likes.length - 1) {
+                if (index == curtiram.length - 1) {
                     summary += ' e ';
                 }
                 else {
@@ -54,40 +54,40 @@ var Message = function (id, text, author, createdOn, replies, likes) {
                 }
             }
 
-            if (author.name == userInfo.Name) {
+            if (usuario.nome == userInfo.Nome) {
                 summary += 'Você';
             }
             else {
-                summary += author.name;
+                summary += usuario.nome;
             }
         });
-        if (self.likes().length > 1) {
+        if (self.curtiram().length > 1) {
             summary += ' curtiram isto';
         }
-        else if (self.likes().length > 0) {
+        else if (self.curtiram().length > 0) {
             summary += ' curtiu isto';
         }
         return summary;
     });
 
-    self.messages = ko.observableArray([]);
+    self.comentarios = ko.observableArray([]);
     $(replies).each(function (index, reply) {
         var lk = [];
-        $(reply.Likes).each(function (array, like) {
-            lk.push({ id: like.Id, name: like.Name });
+        $(reply.Curtiram).each(function (array, like) {
+            lk.push({ id: like.Id, nome: like.Nome });
         });
 
-        self.messages.push(
-            new Message(reply.Id, reply.Text, reply.Author, reply.CreatedOn, [], lk)
+        self.comentarios.push(
+            new Comentario(reply.Id, reply.Texto, reply.Usuario, reply.CriadoEm, [], lk)
         );
     });
 
     self.commentKeypress = function (msg, event) {
         if (event.keyCode) {
             if (event.keyCode === 13) {
-                if (self.newComment().trim().length > 0) {
-                    socialHubClient.sendCommentToServer(self.id(), self.newComment());
-                    self.newComment('');
+                if (self.novoComentario().trim().length > 0) {
+                    socialHubClient.enviarComentarioParaServidor(self.id(), self.novoComentario());
+                    self.novoComentario('');
                 }
                 return false;
             }
@@ -96,35 +96,35 @@ var Message = function (id, text, author, createdOn, replies, likes) {
     }
 
     self.commentClick = function (msg, event) {
-        self.showCommentWatermark(false);
+        self.mostrarMarcaDAgua(false);
     }
 
     self.commentFocus = function (msg, event) {
         self.isTypingComment = true;
-        self.showCommentWatermark(false);
+        self.mostrarMarcaDAgua(false);
     }
 
     self.commentFocusout = function (msg, event) {
-        if (self.newComment().trim().length == 0) {
+        if (self.novoComentario().trim().length == 0) {
             self.isTypingComment = false;
-            self.showCommentWatermark(true);
+            self.mostrarMarcaDAgua(true);
         }
     }
 
     self.commentMouseEnter = function (msg, event) {
-        self.showCommentWatermark(false);
+        self.mostrarMarcaDAgua(false);
     }
 
     self.commentMouseLeave = function (msg, event) {
-        if (!self.isTypingComment && self.newComment().trim().length == 0) {
-            self.showCommentWatermark(true);
+        if (!self.isTypingComment && self.novoComentario().trim().length == 0) {
+            self.mostrarMarcaDAgua(true);
         }
     }
 
-    self.timeEllapsed = ko.computed(function () {
+    self.tempoDecorrido = ko.computed(function () {
         var ellapsed = '';
 
-        var timeStampDiff = (new Date()).getTime() - parseInt(self.createdOn().substring(6, 19));
+        var timeStampDiff = (new Date()).getTime() - parseInt(self.criadoEm().substring(6, 19));
         var s = parseInt(timeStampDiff / 1000);
         var m = parseInt(s / 60);
         var h = parseInt(m / 60);
@@ -138,50 +138,50 @@ var Message = function (id, text, author, createdOn, replies, likes) {
 
 var viewModel = function (model) {
     var self = this;
-    self.messages = ko.observableArray([]);
+    self.comentarios = ko.observableArray([]);
     self.isSignalREnabled = ko.observable(model.isSignalREnabled);
-    self.newComment = ko.observable('');
-    self.showCommentWatermark = ko.observable(true),
+    self.novoComentario = ko.observable('');
+    self.mostrarMarcaDAgua = ko.observable(true),
     self.isTypingComment = false,
 
-    $(model.Messages).each(function (index, message) {
-        var likes = [];
+    $(model.Comentarios).each(function (index, comentario) {
+        var curtiram = [];
 
-        $(message.Likes).each(function (array, like) {
-            likes.push({ id: like.Id, name: like.Name });
+        $(comentario.Curtiram).each(function (array, like) {
+            curtiram.push({ id: like.Id, nome: like.Nome });
         });
 
-        self.messages.push(
-            new Message(message.Id, message.Text, message.Author, message.CreatedOn, message.Messages, likes)
+        self.comentarios.push(
+            new Comentario(comentario.Id, comentario.Texto, comentario.Usuario, comentario.CriadoEm, comentario.Comentarios, curtiram)
         );
     });
 
-    self.findMessageAndAct = function (messageId, parent, action) {
-        $(parent.messages()).each(function (index, message) {
-            if (message.id() == messageId) {
-                action(message);
+    self.findComentarioAndAct = function (comentarioId, parent, action) {
+        $(parent.comentarios()).each(function (index, comentario) {
+            if (comentario.id() == comentarioId) {
+                action(comentario);
                 return false;
             }
 
-            $(message.messages()).each(function (index, message) {
-                if (message.id() == messageId) {
-                    action(message);
+            $(comentario.comentarios()).each(function (index, comentario) {
+                if (comentario.id() == comentarioId) {
+                    action(comentario);
                     return false;
                 }
             });
         });
     }
 
-    self.addNewComment = function (id, comment, user, createdOn) {
-        self.messages.unshift(new Message(id, comment, user, createdOn, [], []));
+    self.adicionarNovoComentario = function (id, comentario, usuario, criadoEm) {
+        self.comentarios.unshift(new Comentario(id, comentario, usuario, criadoEm, [], []));
     } .bind(self);
 
     self.commentKeypress = function (msg, event) {
         if (event.keyCode) {
             if (event.keyCode === 13) {
-                if (self.newComment().trim().length > 0) {
-                    socialHubClient.sendCommentToServer(null, self.newComment());
-                    self.newComment('');
+                if (self.novoComentario().trim().length > 0) {
+                    socialHubClient.enviarComentarioParaServidor(null, self.novoComentario());
+                    self.novoComentario('');
                 }
                 return false;
             }
@@ -190,47 +190,47 @@ var viewModel = function (model) {
     }
 
     self.commentClick = function (msg, event) {
-        self.showCommentWatermark(false);
+        self.mostrarMarcaDAgua(false);
     }
 
     self.commentFocus = function (msg, event) {
         self.isTypingComment = true;
-        self.showCommentWatermark(false);
+        self.mostrarMarcaDAgua(false);
     }
 
     self.commentFocusout = function (msg, event) {
-        if (self.newComment().trim().length == 0) {
+        if (self.novoComentario().trim().length == 0) {
             self.isTypingComment = false;
-            self.showCommentWatermark(true);
+            self.mostrarMarcaDAgua(true);
         }
     }
 
     self.commentMouseEnter = function (msg, event) {
-        self.showCommentWatermark(false);
+        self.mostrarMarcaDAgua(false);
     }
 
     self.commentMouseLeave = function (msg, event) {
-        if (!self.isTypingComment && self.newComment().trim().length == 0) {
-            self.showCommentWatermark(true);
+        if (!self.isTypingComment && self.novoComentario().trim().length == 0) {
+            self.mostrarMarcaDAgua(true);
         }
     }
 };
 
 $(function () {
     window.isSignalREnabled = false;
-    requestWallMessages();
+    requisitarComentariosDoMural();
 });
 
-function requestWallMessages() {
+function requisitarComentariosDoMural() {
     $.ajax({
-        url: "/Home/GetWallMessages",
+        url: "/Home/PegarComentariosDoMural",
         dataType: 'json',
         success: function (data) {
             setTimeout(function () {
                 data.isSignalREnabled = window.isSignalREnabled;
-                window.wallViewModel = new viewModel(data);
+                window.muralViewModel = new viewModel(data);
                 $('#loading-wall-messages').css('display', 'none');
-                ko.applyBindings(window.wallViewModel);
+                ko.applyBindings(window.muralViewModel);
                 $('.wall-messages').css('display', '');
 
                 setTimeout(function () {
@@ -238,7 +238,7 @@ function requestWallMessages() {
                 }, 100);
             }, 50);
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textoStatus, errorThrown) {
             $('.ajax-error').css('display', '');
             $('#loading-wall-messages').css('display', 'none');
         }
@@ -248,65 +248,65 @@ function requestWallMessages() {
 function setupHubClient() {
     socialHubClient = $.connection.socialHub;
 
-    // Start the connection
+    // Inicia a conexão
     $.connection.hub.start(function () {
-        socialHubClient.join(userInfo.Name);
+        socialHubClient.join(userInfo.Nome);
     }).done(function () {
         window.isSignalREnabled = true;
-        if (window.wallViewModel) {
-            window.wallViewModel.isSignalREnabled(true);
+        if (window.muralViewModel) {
+            window.muralViewModel.isSignalREnabled(true);
         }
     }).fail(function () {
         alert('Conexão SignalR falhou!');
     });
 
-    socialHubClient.updateLike = function (messageId, personWhoLiked) {
-        window.wallViewModel.findMessageAndAct(messageId, wallViewModel, function (message) {
-            message.likes.push({
-                id: personWhoLiked.Id,
-                name: personWhoLiked.Name
+    socialHubClient.atualizarCurtidas = function (comentarioId, pessoasQueCurtiram) {
+        window.muralViewModel.findComentarioAndAct(comentarioId, muralViewModel, function (comentario) {
+            comentario.curtiram.push({
+                id: pessoasQueCurtiram.Id,
+                nome: pessoasQueCurtiram.Nome
             });
         });
     };
 
-    socialHubClient.updateUnlike = function (messageId, personWhoUnliked) {
-        window.wallViewModel.findMessageAndAct(messageId, wallViewModel, function (message) {
-            for (var i = message.likes().length - 1; i >= 0; i--) {
-                if (message.likes()[i].id == personWhoUnliked.Id) {
-                    message.likes.splice(i, 1);
+    socialHubClient.atualizarDescurtidas = function (comentarioId, pessoasQueCurtiram) {
+        window.muralViewModel.findComentarioAndAct(comentarioId, muralViewModel, function (comentario) {
+            for (var i = comentario.curtiram().length - 1; i >= 0; i--) {
+                if (comentario.curtiram()[i].id == pessoasQueCurtiram.Id) {
+                    comentario.curtiram.splice(i, 1);
                     break;
                 }
             }
         });
     };
 
-    socialHubClient.addComment = function (parentMessageId, newMessageId, comment, author) {
-        if (parentMessageId) {
-            window.wallViewModel.findMessageAndAct(parentMessageId, wallViewModel, function (parentMessage) {
-                parentMessage.addNewComment(
-                    newMessageId,
+    socialHubClient.adicionarComentario = function (parentComentarioId, newComentarioId, comment, usuario) {
+        if (parentComentarioId) {
+            window.muralViewModel.findComentarioAndAct(parentComentarioId, muralViewModel, function (parentComentario) {
+                parentComentario.adicionarNovoComentario(
+                    newComentarioId,
                     comment,
-                    { Id: author.Id, Name: author.Name, SmallPicturePath: author.SmallPicturePath, MediumPicturePath: author.MediumPicturePath },
+                    { Id: usuario.Id, Nome: usuario.Nome, SmallPicturePath: usuario.SmallPicturePath, MediumPicturePath: usuario.MediumPicturePath },
                     '/Date(' + (new Date()).getTime() + ')/'
                 );
             });
         }
         else {
-            window.wallViewModel.addNewComment(
-                newMessageId,
+            window.muralViewModel.adicionarNovoComentario(
+                newComentarioId,
                 comment,
-                { Id: author.Id, Name: author.Name, SmallPicturePath: author.SmallPicturePath, MediumPicturePath: author.MediumPicturePath },
+                { Id: usuario.Id, Nome: usuario.Nome, SmallPicturePath: usuario.SmallPicturePath, MediumPicturePath: usuario.MediumPicturePath },
                 '/Date(' + (new Date()).getTime() + ')/'
             );
         }
     };
 }
 
-function setTimeEllapsedField(message) {
-    message.timeEllapsed = ko.computed(function () {
+function setTimeEllapsedField(comentario) {
+    comentario.timeEllapsed = ko.computed(function () {
         var ellapsed = '';
 
-        var timeStampDiff = (new Date()).getTime() - parseInt(message.CreatedOn.substring(6, 19));
+        var timeStampDiff = (new Date()).getTime() - parseInt(comentario.CriadoEm.substring(6, 19));
         var s = parseInt(timeStampDiff / 1000);
         var m = parseInt(s / 60);
         var h = parseInt(m / 60);
@@ -317,21 +317,21 @@ function setTimeEllapsedField(message) {
         return ellapsed;
     });
 
-    $(message.Messages).each(function (array, answer, index) {
+    $(comentario.Comentarios).each(function (array, answer, index) {
         setTimeEllapsedField(answer);
     });
 }
 
-function setLikeSummaryField(message) {
-    message.likes = ko.observableArray([
-        { Id: 1, Name: "Bungle" },
-        { Id: 2, Name: "George" },
-        { Id: 3, Name: "Zippy" }
+function definirCampoSumarioDeCurtidas(comentario) {
+    comentario.curtiram = ko.observableArray([
+        { Id: 1, Nome: "Bungle" },
+        { Id: 2, Nome: "George" },
+        { Id: 3, Nome: "Zippy" }
     ]);
 
-    message.likeSummary = ko.computed(function () {
+    comentario.sumarioDeCurtidas = ko.computed(function () {
         var summary = '';
-        $(message.likes).each(function (array, author, index) {
+        $(comentario.curtiram).each(function (array, usuario, index) {
             if (summary.length > 0) {
                 if (index == array.length - 1) {
                     summary += 'and ';
@@ -340,37 +340,37 @@ function setLikeSummaryField(message) {
                     summary += ', ';
                 }
             }
-            summary += author.Name;
+            summary += usuario.Nome;
         });
-        if (message.Likes.length > 0) {
+        if (comentario.Curtiram.length > 0) {
             summary += ' liked this';
         }
         return summary;
     });
 
-    $(message.Messages).each(function (array, answer, index) {
-        setLikeSummaryField(answer);
+    $(comentario.Comentarios).each(function (array, answer, index) {
+        definirCampoSumarioDeCurtidas(answer);
     });
 }
 
-function like(message) {
-    socialHubClient.sendLikeToServer(message.Id);
+function curtir(comentario) {
+    socialHubClient.enviarCurtirParaServidor(comentario.Id);
 
-    findMessageAndAct(message.Id, wallViewModel, function (message) {
-        message.likes.push({
+    findComentarioAndAct(comentario.Id, muralViewModel, function (comentario) {
+        comentario.curtiram.push({
             Id: userInfo.Id,
-            Name: userInfo.Name
+            Nome: userInfo.Nome
         });
     });
 }
 
-function unlike(message) {
-    socialHubClient.sendUnlikeToServer(message.Id);
+function descurtir(comentario) {
+    socialHubClient.enviarDescurtirParaServidor(comentario.Id);
 
-    findMessageAndAct(message.Id, wallViewModel, function (message) {
-        for (var i = message.likes.length; i >= 0; i--) {
-            if (message.likes[i].id == userInfo.Id) {
-                message.likes.splice(i, 1);
+    findComentarioAndAct(comentario.Id, muralViewModel, function (comentario) {
+        for (var i = comentario.curtiram.length; i >= 0; i--) {
+            if (comentario.curtiram[i].id == userInfo.Id) {
+                comentario.curtiram.splice(i, 1);
             }
         }
     });
@@ -384,25 +384,25 @@ function getEllapsedTime(timeStampDiff) {
     var d = parseInt(h / 24);
 
     if (d > 1) {
-        ellapsed = d + ' dias atrás';
+        ellapsed = 'Há ' + d + ' dias';
     }
     else if (d == 1) {
-        ellapsed = d + ' dia atrás';
+        ellapsed = 'Há ' + d + ' dia';
     }
     else if (h > 1) {
-        ellapsed = h + ' horas atrás';
+        ellapsed = 'Há ' + h + ' horas';
     }
     else if (h == 1) {
-        ellapsed = h + ' hora atrás';
+        ellapsed = 'Há ' + h + ' hora';
     }
     else if (m > 1) {
-        ellapsed = m + ' minutos atrás';
+        ellapsed = 'Há ' + m + ' minutos';
     }
     else if (m == 1) {
-        ellapsed = m + ' minuto atrás';
+        ellapsed = 'Há ' + m + ' minuto';
     }
     else if (s > 10) {
-        ellapsed = s + ' segundos atrás';
+        ellapsed = 'Há ' + s + ' segundos';
     }
     else {
         ellapsed = 'neste momento';

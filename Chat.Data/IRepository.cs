@@ -7,7 +7,7 @@ using Chat.Domain;
 
 namespace Chat.Data
 {
-    public interface IRepository<T> where T : Entity
+    public interface IRepository<T> where T : Entidade
     {
         T Get(int id);
         IList<T> GetByExample(T example);

@@ -10,7 +10,7 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 namespace Chat.Data
 {
-    public abstract class BaseRepository<T> : IRepository<T> where T : Entity
+    public abstract class BaseRepository<T> : IRepository<T> where T : Entidade
     {
         static ISession session = null;
 
@@ -101,7 +101,7 @@ namespace Chat.Data
                 .Database(MsSqlCeConfiguration.Standard
                     .ConnectionString(connectionString))
                 .Mappings(m =>
-                    m.FluentMappings.AddFromAssemblyOf<Chat.Domain.Model.Author>())
+                    m.FluentMappings.AddFromAssemblyOf<Chat.Domain.Model.Usuario>())
                 .BuildSessionFactory();
         }
     }

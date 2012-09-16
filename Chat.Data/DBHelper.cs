@@ -15,110 +15,114 @@ namespace Chat.Data
     {
         public static void Generate()
         {
-            // create our NHibernate session factory
+            // cria nosso factory de sessão NHibernate
             var sessionFactory = CreateSessionFactory();
 
             using (var session = sessionFactory.OpenSession())
             {
-                // populate the database
+                // popula a base de dados
                 using (var transaction = session.BeginTransaction())
                 {
                     var commonPassword = "123456";
-                    var leonard = new Author { Login = "leonard", Password = commonPassword, Name = "Leonard Hofstadter" };
-                    var sheldon = new Author { Login = "sheldon", Password = commonPassword, Name = "Sheldon Cooper" };
-                    var raj = new Author { Login = "raj", Password = commonPassword, Name = "Rajesh Koothrappali" };
-                    var howard = new Author { Login = "howard", Password = commonPassword, Name = "Howard Wollowitz" };
-                    var penny = new Author { Login = "penny", Password = commonPassword, Name = "Penny" };
+                    var barriga = new Usuario { Login = "barriga", Senha = commonPassword, Nome = "Sr. Barriga" };
+                    var madruga = new Usuario { Login = "madruga", Senha = commonPassword, Nome = "Sr. Madruga" };
+                    var chaves = new Usuario { Login = "chaves", Senha = commonPassword, Nome = "Chaves" };
+                    var chiquinha = new Usuario { Login = "chiquinha", Senha = commonPassword, Nome = "Chiquinha" };
 
-                    AddAuthors(session, leonard, sheldon, raj, howard, penny);
+                    AddAuthors(session, barriga, madruga, chaves, chiquinha);
 
-                    //AddMessageToAuthor();
-                    var author = raj;
+                    var author = barriga;
 
                     var time = DateTime.Now.Add(new TimeSpan(-40, 0, 0));
-                    var msg = AddMessage(author, "raj (Entering dressed as Thor): Hey. Sorry I’m late, but my hammer got stuck in the door on the bus.", time);
+                    var msg = AddMessage(author, "Tirem a mobília toda. Ponham tudo aí!", time);
                     time = time.Add(new TimeSpan(0, 149, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "You went with Thor?", time);
+                    AddMessage(madruga, msg, "Meu senhor, pode me explicar o que significa isso?", time);
                     time = time.Add(new TimeSpan(0, 149, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(raj, msg, "What? Just because I’m Indian I can’t be a Norse God? No, no, no, Raj has to be an Indian God. That’s racism. I mean, look at Wolowitz, he’s not English, but he’s dressed like Peter Pan. Sheldon(entering in a body suit featuring black and white vertical lines) is neither sound nor light, but he’s obviously the Doppler Effect.", time);
+                    AddMessage(barriga, msg, "Eu avisei que se não pagasse todo o aluguel atrasado, eu despejaria o senhor.", time);
                     time = time.Add(new TimeSpan(0, 149, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(howard, msg, "I’m not Peter Pan, I’m Robin Hood.", time);
+                    AddMessage(madruga, msg, "Mas eu já tenho o dinheiro.", time);
                     time = time.Add(new TimeSpan(0, 149, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(raj, msg, "Really, because I saw Peter Pan, and you’re dressed exactly like Cathy Rigby. She was a little bigger than you, but it’s basically the same look, man.", time);
+                    AddMessage(barriga, msg, "Ah é? Então dá!", time);
                     time = time.Add(new TimeSpan(0, 149, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "Hey, Sheldon, there’s something I want to talk to you about before we go to the party.", time);
+                    AddMessage(madruga, msg, "Está ali dentro, venha. Vamos entrar.", time);
                     time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "I don’t care if anybody gets it, I’m going as the Doppler Effect.", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "No, it’s not…", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "If I have to, I can demonstrate. Neeeeoooowwwww!", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "Terrific. Um, this party is my first chance for Penny to see me in the context of her social group, and I need you not to embarrass me tonight.", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "Well, what exactly do you mean by embarrass you?", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "For example, tonight no-one needs to know that my middle name is Leakey.", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "Well, there’s nothing embarrassing about that, your father worked with Lewis Leakey, a great anthropologist. It had nothing to do with your bed-wetting.", time);
-                    time = time.Add(new TimeSpan(0, 149, 0));
-                    session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "All I’m saying is that this party is the perfect opportunity for Penny to see me as a member of her peer group. A potential close friend and… perhaps more. I don’t want to look like a dork.", time);
                     session.SaveOrUpdate(msg);
 
                     time = DateTime.Now.Add(new TimeSpan(-1, 0, 0));
-                    msg = AddMessage(author, "Water Demon.", time);
+                    msg = AddMessage(chaves, "Chiquinha, Chiquinha!", time);
                     time = time.Add(new TimeSpan(0, 2, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(howard, msg, "Ice Dragon.", time);
+                    AddMessage(chiquinha, msg, "O que foi Chaves?", time);
                     time = time.Add(new TimeSpan(0, 3, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "Lesser Warlord of Ka’a.", time);
+                    AddMessage(chaves, msg, "Olha, isso aqui é igualzinho ao que você tem na sua casa.", time);
                     time = time.Add(new TimeSpan(0, 1, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "Not so fast. Infinite Sheldon.", time);
+                    AddMessage(chiquinha, msg, "É mesmo!", time);
                     time = time.Add(new TimeSpan(0, 7, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "Infinite Sheldon?", time);
-                    //time = time.Add(new TimeSpan(0, 2, 0));
+                    AddMessage(chaves, msg, "E a cama também é igualzinha a que tem na sua casa. E isso aqui também. Todos os móveis são iguaizinhos aos da sua casa.", time);
+                    time = time.Add(new TimeSpan(0, 2, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "Yes, Infinite Sheldon defeats all other cards and does not violate the rule against homemade cards because I made it at work.", time);
-                    //time = time.Add(new TimeSpan(0, 2, 0));
+                    AddMessage(chiquinha, msg, "Não são iguaizinhos aos móveis da minha casa. São os móveis da minha casa.", time);
+                    time = time.Add(new TimeSpan(0, 2, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(leonard, msg, "Do you understand why people don’t want to play with you?", time);
-                    //time = time.Add(new TimeSpan(0, 1, 0));
+                    AddMessage(chaves, msg, "Nossa, e o que eles estão fazendo aqui fora?", time);
+                    time = time.Add(new TimeSpan(0, 1, 0));
                     session.SaveOrUpdate(msg);
-                    AddMessage(sheldon, msg, "No, although it’s a question I’ve been pondering since preschool.", time);
+                    AddMessage(chiquinha, msg, "Ah, eu já sei! Meu pai vai comprar móveis novos, Chaves!", time);
                     session.SaveOrUpdate(msg);
+                    AddMessage(chaves, msg, "E por isso ele botou aqui fora?", time);
+                    time = time.Add(new TimeSpan(0, 1, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(chiquinha, msg, "Ele vai jogar tudo no lixo... Vamos, vamos brincar!", time);
+                    session.SaveOrUpdate(msg);
+
+                    time = DateTime.Now.Add(new TimeSpan(-1, 0, 0));
+                    msg = AddMessage(madruga, "Chiquinha!", time);
+                    time = time.Add(new TimeSpan(0, 2, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(chiquinha, msg, "Sim, pai.", time);
+                    time = time.Add(new TimeSpan(0, 3, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(madruga, msg, "Chiquinha, você não viu onde eu deixei o dinheiro do aluguel?", time);
+                    time = time.Add(new TimeSpan(0, 1, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(chiquinha, msg, "Sim, papai. O senhor disse que ia colocar em um envelope de papel e que depois ia colocar em algum móvel.", time);
+                    time = time.Add(new TimeSpan(0, 7, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(madruga, msg, "Ah, tem razão! Mas em que móvel eu guardei?", time);
+                    time = time.Add(new TimeSpan(0, 2, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(chiquinha, msg, "Nem imagino.", time);
+                    time = time.Add(new TimeSpan(0, 2, 0));
+                    session.SaveOrUpdate(msg);
+                    AddMessage(madruga, msg, "Me ajude a achar então.", time);
+                    time = time.Add(new TimeSpan(0, 1, 0));
+                    session.SaveOrUpdate(msg);
+
                     transaction.Commit();
                 }
             }
         }
 
-        private static Message AddMessage(Author author, string text, DateTime createdOn)
+        private static Comentario AddMessage(Usuario author, string text, DateTime criadoEm)
         {
-            var msg = author.AddMessage(new Message() { Text = text, CreatedOn = createdOn });
+            var msg = author.AdicionarComentario(new Comentario() { Texto = text, CriadoEm = criadoEm });
             return msg;
         }
 
-        private static Message AddMessage(Author author, Message msg, string text, DateTime createdOn)
+        private static Comentario AddMessage(Usuario author, Comentario msg, string text, DateTime criadoEm)
         {
-            return msg.AddMessage(author, new Message() { Text = text, CreatedOn = createdOn });
+            return msg.AdicionarComentario(author, new Comentario() { Texto = text, CriadoEm = criadoEm });
         }
 
-        private static void AddAuthors(ISession session, params Author[] authors)
+        private static void AddAuthors(ISession session, params Usuario[] authors)
         {
             foreach (var author in authors)
             {
@@ -131,9 +135,10 @@ namespace Chat.Data
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["connectionString"].ToString();
 
             return Fluently.Configure()
-                .Database(MsSqlCeConfiguration.Standard)
+                .Database(MsSqlCeConfiguration.Standard
+                    .ConnectionString(connectionString))
                 .Mappings(m =>
-                    m.FluentMappings.AddFromAssemblyOf<Chat.Domain.Model.Author>())
+                    m.FluentMappings.AddFromAssemblyOf<Chat.Domain.Model.Usuario>())
                 .ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();
         }

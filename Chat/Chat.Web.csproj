@@ -168,15 +168,10 @@
     <Content Include="Content\images\actor4_large.gif" />
     <Content Include="Content\images\actor4_medium.gif" />
     <Content Include="Content\images\actor4_small.gif" />
-    <Content Include="Content\images\actor5.gif" />
-    <Content Include="Content\images\actor5_large.gif" />
-    <Content Include="Content\images\actor5_medium.gif" />
-    <Content Include="Content\images\actor5_small.gif" />
     <Content Include="Content\images\Background1.jpg" />
     <Content Include="Content\images\Background2.jpg" />
     <Content Include="Content\images\Background3.jpg" />
     <Content Include="Content\images\Background4.jpg" />
-    <Content Include="Content\images\Background5.jpg" />
     <Content Include="Content\images\clock.png" />
     <Content Include="Content\images\balloonEdge.png" />
     <Content Include="Content\images\exclamation.png" />

@@ -50,12 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mappings\AuthorMap.cs" />
+    <Compile Include="Mappings\UsuarioMap.cs" />
     <Compile Include="Mappings\BaseMapcs.cs" />
-    <Compile Include="Mappings\MessageMap.cs" />
-    <Compile Include="Model\Author.cs" />
-    <Compile Include="Model\Entity.cs" />
-    <Compile Include="Model\Message.cs" />
+    <Compile Include="Mappings\ComentarioMap.cs" />
+    <Compile Include="Model\Usuario.cs" />
+    <Compile Include="Model\Entidade.cs" />
+    <Compile Include="Model\Comentario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

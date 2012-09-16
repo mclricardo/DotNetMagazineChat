@@ -18,9 +18,9 @@ namespace Chat.Controllers
             }
             else
             {
-                var authorRepository = new AuthorRepository();
-                var author = authorRepository.GetAllFilteredBy(x => x.Login.Equals(User.Identity.Name, StringComparison.InvariantCultureIgnoreCase)).Single();
-                return View(author);
+                var usuarioRepository = new UsuarioRepository();
+                var usuario = usuarioRepository.GetAllFilteredBy(x => x.Login.Equals(User.Identity.Name, StringComparison.InvariantCultureIgnoreCase)).Single();
+                return View(usuario);
             }
         }
 
@@ -31,13 +31,13 @@ namespace Chat.Controllers
         }
 
         [OutputCache(Duration=0)]
-        public JsonResult GetWallMessages()
+        public JsonResult PegarComentariosDoMural()
         {
-            var messageRepository = new MessageRepository();
-            var messages = messageRepository.GetAllFilteredByAndOrderedBy(
-                x => x.ParentMessage == null
-                , x => - x.CreatedOn.Ticks);
-            return new JsonResult() { Data = new { Messages = messages }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            var comentarioRepository = new ComentarioRepository();
+            var comentarios = comentarioRepository.GetAllFilteredByAndOrderedBy(
+                x => x.ComentarioPai == null
+                , x => - x.CriadoEm.Ticks);
+            return new JsonResult() { Data = new { Comentarios = comentarios }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

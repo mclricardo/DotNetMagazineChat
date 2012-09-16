@@ -32,8 +32,8 @@ namespace Chat.Controllers
                 if (model.RecreateDB)
                     DBHelper.Generate();
             
-                var authorRepository = new AuthorRepository();
-                if (authorRepository.ValidateUser(model.UserName, model.Password))
+                var usuarioRepository = new UsuarioRepository();
+                if (usuarioRepository.ValidarUsuario(model.UserName, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

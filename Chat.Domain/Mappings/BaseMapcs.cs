@@ -7,12 +7,12 @@ using Chat.Domain.Model;
 
 namespace Chat.Domain.Mappings
 {
-    public abstract class BaseMap<T> : ClassMap<T> where T : Entity
+    public abstract class BaseMap<T> : ClassMap<T> where T : Entidade
     {
         public BaseMap()
         {
             Id(x => x.Id);
-            Map(x => x.CreatedOn);
+            Map(x => x.CriadoEm);
         }
     }
 }
