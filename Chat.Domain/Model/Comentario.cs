@@ -10,7 +10,7 @@ namespace Chat.Domain.Model
     {
         public Comentario()
         {
-            Comentarios = new List<Comentario>();
+            Respostas = new List<Comentario>();
             Curtiram = new List<Usuario>();
         }
 
@@ -19,13 +19,13 @@ namespace Chat.Domain.Model
         [ScriptIgnore]
         public virtual Comentario ComentarioPai { get; set; }
         public virtual string Texto { get; set; }
-        public virtual IList<Comentario> Comentarios { get; set; }
+        public virtual IList<Comentario> Respostas { get; set; }
         public virtual IList<Usuario> Curtiram { get; set; }
 
         public virtual Comentario AdicionarComentario(Comentario comentario)
         {
             comentario.ComentarioPai = this;
-            Comentarios.Add(comentario);
+            Respostas.Add(comentario);
             return comentario;
         }
 
@@ -33,8 +33,8 @@ namespace Chat.Domain.Model
         {
             comentario.Usuario = usuario;
             comentario.ComentarioPai = this;
-            comentario.Ordem = Comentarios.Count() + 1;
-            Comentarios.Add(comentario);
+            comentario.Ordem = Respostas.Count() + 1;
+            Respostas.Add(comentario);
 
             usuario.Comentarios.Add(comentario);
             return comentario;

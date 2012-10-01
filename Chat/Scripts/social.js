@@ -152,7 +152,7 @@ var viewModel = function (model) {
         });
 
         self.comentarios.push(
-            new Comentario(comentario.Id, comentario.Texto, comentario.Usuario, comentario.CriadoEm, comentario.Comentarios, curtiram)
+            new Comentario(comentario.Id, comentario.Texto, comentario.Usuario, comentario.CriadoEm, comentario.Respostas, curtiram)
         );
     });
 
@@ -317,7 +317,7 @@ function setTimeEllapsedField(comentario) {
         return ellapsed;
     });
 
-    $(comentario.Comentarios).each(function (array, answer, index) {
+    $(comentario.Respostas).each(function (array, answer, index) {
         setTimeEllapsedField(answer);
     });
 }
@@ -348,7 +348,7 @@ function definirCampoSumarioDeCurtidas(comentario) {
         return summary;
     });
 
-    $(comentario.Comentarios).each(function (array, answer, index) {
+    $(comentario.Respostas).each(function (array, answer, index) {
         definirCampoSumarioDeCurtidas(answer);
     });
 }

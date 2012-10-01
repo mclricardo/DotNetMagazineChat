@@ -25,6 +25,14 @@ namespace Chat.Domain.Model
         {
             get { return "Content/images/actor" + this.Id.ToString() + "_medium.gif"; }
         }
+        public virtual string LargePicturePath
+        {
+            get { return "Content/images/actor" + this.Id.ToString() + "_large.gif"; }
+        }
+        public virtual string PicturePath
+        {
+            get { return "Content/images/actor" + this.Id.ToString() + ".gif"; }
+        }
         [ScriptIgnore]
         public virtual IList<Comentario> Comentarios { get; set; }
 

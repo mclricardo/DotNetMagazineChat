@@ -15,7 +15,7 @@ namespace Chat.Domain.Mappings
             Map(x => x.Ordem);
             References(x => x.ComentarioPai, "ComentarioPai_id");
             References(x => x.Usuario, "Usuario_id");
-            HasMany(x => x.Comentarios)
+            HasMany(x => x.Respostas)
                 .Cascade.All()
                 .Inverse()
                 .OrderBy("Ordem");
